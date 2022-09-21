@@ -5,7 +5,7 @@
 //  Created by Davin Djayadi on 21/09/22.
 //
 
-import Foundation
+import UIKit
 
 struct Service {
     private static let HOST = "https://api.rawg.io"
@@ -35,6 +35,32 @@ struct Service {
             callback([], .unknown)
         }
         task.resume()
+    }
+
+    static func loadImage(imageUrl: String, callback: @escaping (UIImage?) -> Void) {
+        let keyCache = imageUrl as NSString
+        if Cache.isImageCached(key: keyCache) {
+            let image = Cache.getImageCache(key: keyCache)
+            callback(image)
+            return
+        }
+        guard let url = URL(string: imageUrl) else {
+            callback(nil)
+            return
+        }
+        let request = URLRequest(url: url)
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            if let data = data, !data.isEmpty, let image = UIImage(data: data) {
+                Cache.setImageCache(key: keyCache, image: image)
+                DispatchQueue.main.async {
+                    callback(image)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    callback(nil)
+                }
+            }
+        }.resume()
     }
 }
 

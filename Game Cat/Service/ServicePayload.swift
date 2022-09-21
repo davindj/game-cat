@@ -5,8 +5,6 @@
 //  Created by Davin Djayadi on 21/09/22.
 //
 
-import Foundation
-
 // MARK: - Payload Get Games
 struct ServicePayloadGetGames: Codable {
     let results: [ServicePayloadGetGamesResult]

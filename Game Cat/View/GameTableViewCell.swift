@@ -11,8 +11,8 @@ class GameTableViewCell: UITableViewCell {
     // MARK: Components
     private let imgViewGameIcon: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "star.fill")
         imageView.layer.cornerRadius = 20
+        imageView.clipsToBounds = true
         return imageView
     }()
     private let stackViewGameAttribute: UIStackView = {
@@ -72,10 +72,6 @@ class GameTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
     private func configViewHierarchy() {
         addSubview(imgViewGameIcon)
         addSubview(stackViewGameAttribute)
@@ -121,6 +117,15 @@ class GameTableViewCell: UITableViewCell {
             imgViewRating.heightAnchor.constraint(equalTo: imgViewRating.widthAnchor)
         ])
     }
+    private func loadGameImage(imageUrl: String) {
+        Service.loadImage(imageUrl: imageUrl) { [weak self] img in
+            guard let self = self else { return }
+            let img = img ?? UIImage(systemName: "xmark.octagon")
+            DispatchQueue.main.async {
+                self.imgViewGameIcon.image = img
+            }
+        }
+    }
     
     // MARK: Public Function
     func initValue(game: Game) {
@@ -128,5 +133,6 @@ class GameTableViewCell: UITableViewCell {
         labelGenre.text = game.genres.joined(separator: " . ")
         labelRating.text = "\(game.rating)"
         labelReleaseDate.text = game.released
+        loadGameImage(imageUrl: game.backgroundImage)
     }
 }
