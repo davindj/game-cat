@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D72F090428DADB2A001BC174 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D72F090328DADB2A001BC174 /* Service.swift */; };
+		D7471F6A28DADC55007A6460 /* ServiceErrorStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7471F6928DADC55007A6460 /* ServiceErrorStatus.swift */; };
+		D7471F6C28DADCAA007A6460 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7471F6B28DADCAA007A6460 /* Game.swift */; };
+		D7471F7128DAE5AF007A6460 /* ServicePayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7471F7028DAE5AF007A6460 /* ServicePayload.swift */; };
 		D7E03E6428D9D4DF0072C7EA /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E03E6328D9D4DF0072C7EA /* UIColor.swift */; };
 		D7FBFB4828D72F0800DEDF11 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FBFB4728D72F0800DEDF11 /* AppDelegate.swift */; };
 		D7FBFB4A28D72F0800DEDF11 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7FBFB4928D72F0800DEDF11 /* SceneDelegate.swift */; };
@@ -17,6 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D72F090328DADB2A001BC174 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		D7471F6928DADC55007A6460 /* ServiceErrorStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceErrorStatus.swift; sourceTree = "<group>"; };
+		D7471F6B28DADCAA007A6460 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		D7471F7028DAE5AF007A6460 /* ServicePayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicePayload.swift; sourceTree = "<group>"; };
 		D7E03E6328D9D4DF0072C7EA /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		D7FBFB4428D72F0800DEDF11 /* Game Cat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Game Cat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7FBFB4728D72F0800DEDF11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -39,6 +47,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D72F090228DADB0D001BC174 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				D72F090328DADB2A001BC174 /* Service.swift */,
+				D7471F6928DADC55007A6460 /* ServiceErrorStatus.swift */,
+				D7471F7028DAE5AF007A6460 /* ServicePayload.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		D7471F6D28DADCB1007A6460 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D7471F6B28DADCAA007A6460 /* Game.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		D7E03E6028D9D4650072C7EA /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -79,8 +105,10 @@
 				D7FBFB5028D72F0900DEDF11 /* Assets.xcassets */,
 				D7FBFB5228D72F0900DEDF11 /* LaunchScreen.storyboard */,
 				D7FBFB5528D72F0900DEDF11 /* Info.plist */,
+				D7471F6D28DADCB1007A6460 /* Model */,
 				D7FBFB6328D77C5100DEDF11 /* View */,
 				D7FBFB5E28D737A200DEDF11 /* ViewController */,
+				D72F090228DADB0D001BC174 /* Service */,
 				D7E03E6028D9D4650072C7EA /* Extension */,
 			);
 			path = "Game Cat";
@@ -196,10 +224,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7FBFB6228D74E6000DEDF11 /* HomeViewController.swift in Sources */,
+				D7471F6A28DADC55007A6460 /* ServiceErrorStatus.swift in Sources */,
 				D7FBFB4828D72F0800DEDF11 /* AppDelegate.swift in Sources */,
+				D7471F7128DAE5AF007A6460 /* ServicePayload.swift in Sources */,
+				D72F090428DADB2A001BC174 /* Service.swift in Sources */,
 				D7FBFB4A28D72F0800DEDF11 /* SceneDelegate.swift in Sources */,
 				D7FBFB6528D77C6C00DEDF11 /* GameTableViewCell.swift in Sources */,
 				D7E03E6428D9D4DF0072C7EA /* UIColor.swift in Sources */,
+				D7471F6C28DADCAA007A6460 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

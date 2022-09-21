@@ -8,7 +8,6 @@
 import UIKit
 
 class GameTableViewCell: UITableViewCell {
-    
     // MARK: Components
     private let imgViewGameIcon: UIImageView = {
         let imageView = UIImageView()
@@ -124,10 +123,10 @@ class GameTableViewCell: UITableViewCell {
     }
     
     // MARK: Public Function
-    func initValue() {
-        labelName.text = "Name 1"
-        labelGenre.text = "Action . RPG"
-        labelRating.text = "4.0"
-        labelReleaseDate.text = "13 Sept 22'"
+    func initValue(game: Game) {
+        labelName.text = game.name
+        labelGenre.text = game.genres.joined(separator: " . ")
+        labelRating.text = "\(game.rating)"
+        labelReleaseDate.text = game.released
     }
 }

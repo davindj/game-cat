@@ -9,7 +9,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     private static let CELLNAME: String = "gameCell"
-    private var games: [String] = []
+    private var games: [Game] = []
     
     private var searchController: UISearchController = {
         let searchController = UISearchController()
@@ -51,17 +51,18 @@ class HomeViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
     }
     private func loadGames() {
-        games = ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        games += ["game 1", "game 2", "game 3"]
-        tableView.reloadData()
+        Service.getGames { [weak self] games, errorStatus in
+            guard let self = self else { return }
+            if errorStatus != nil {
+                // TODO: kasih alert
+                print("ada error boi")
+                return
+            }
+            self.games = games
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 }
 
@@ -72,7 +73,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: HomeViewController.CELLNAME, for: indexPath) as? GameTableViewCell {
-            cell.initValue()
+            let game = games[indexPath.row]
+            cell.initValue(game: game)
             return cell
         }
        return UITableViewCell()
