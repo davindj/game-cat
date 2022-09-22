@@ -10,10 +10,12 @@ import UIKit
 struct Service {
     private static let HOST = "https://api.rawg.io"
     private static let APIKEY = "your_apikey"
-    static func getGames(callback: @escaping([Game], ServiceGetAllDataErrorStatus?) -> Void) {
+    static func getGames(searchText: String, callback: @escaping([Game], ServiceGetAllDataErrorStatus?) -> Void) {
+        // TODO: cache search result + core data
         guard var components = URLComponents(string: "\(HOST)/api/games") else { return }
         components.queryItems = [
-            URLQueryItem(name: "key", value: APIKEY)
+            URLQueryItem(name: "key", value: APIKEY),
+            URLQueryItem(name: "search", value: searchText)
         ]
         guard let componentUrl = components.url else { return }
         let request = URLRequest(url: componentUrl)
@@ -68,10 +70,12 @@ struct Service {
 extension Service {
     private static func decodeGetAllGameJSON(from data: Data) -> ServicePayloadGetGames? {
         let decoder = JSONDecoder()
-        if let gamesPayload = try? decoder.decode(ServicePayloadGetGames.self, from: data) {
+        do {
+            let gamesPayload = try decoder.decode(ServicePayloadGetGames.self, from: data)
             return gamesPayload
+        } catch {
+            return nil
         }
-        return nil
     }
     private static func convertPayloadGetGamesToGames(payload: ServicePayloadGetGames) -> [Game] {
         var games: [Game] = []

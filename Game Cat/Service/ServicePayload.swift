@@ -12,8 +12,9 @@ struct ServicePayloadGetGames: Codable {
 
 struct ServicePayloadGetGamesResult: Codable {
     let id: Int
-    let name, released: String
-    let backgroundImage: String
+    let name: String
+    let released: String?
+    let backgroundImage: String?
     let rating: Double
     let genres: [ServicePayloadGetGamesResultGenre]
 

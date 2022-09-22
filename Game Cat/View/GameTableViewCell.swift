@@ -117,7 +117,12 @@ class GameTableViewCell: UITableViewCell {
             imgViewRating.heightAnchor.constraint(equalTo: imgViewRating.widthAnchor)
         ])
     }
-    private func loadGameImage(imageUrl: String) {
+    private func loadGameImage(imageUrl: String?) {
+        imgViewGameIcon.image = nil
+        guard let imageUrl = imageUrl else {
+            self.imgViewGameIcon.image = UIImage(systemName: "xmark.octagon")
+            return
+        }
         Service.loadImage(imageUrl: imageUrl) { [weak self] img in
             guard let self = self else { return }
             let img = img ?? UIImage(systemName: "xmark.octagon")
@@ -132,7 +137,7 @@ class GameTableViewCell: UITableViewCell {
         labelName.text = game.name
         labelGenre.text = game.genres.joined(separator: " . ")
         labelRating.text = "\(game.rating)"
-        labelReleaseDate.text = game.released
+        labelReleaseDate.text = game.released ?? ""
         loadGameImage(imageUrl: game.backgroundImage)
     }
 }

@@ -6,26 +6,25 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class HomeViewController: UIViewController {
     private static let CELLNAME: String = "gameCell"
     private var games: [Game] = []
+    private var disposeBag: DisposeBag = DisposeBag()
     
-    private var searchController: UISearchController = {
-        let searchController = UISearchController()
-        searchController.hidesNavigationBarDuringPresentation = true
-        searchController.searchBar.placeholder = "game name... ex: terraria, dota, touhou"
-        return searchController
-    }()
+    private var searchController: UISearchController = UISearchController(searchResultsController: nil)
     private var tableView: UITableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
         configTableView()
+        configSearchController()
         configNavigation()
         configConstraints()
-        loadGames()
+        configRx()
     }
     private func configTableView() {
         tableView.delegate = self
@@ -33,10 +32,14 @@ class HomeViewController: UIViewController {
         tableView.register(GameTableViewCell.self, forCellReuseIdentifier: HomeViewController.CELLNAME)
         self.view.addSubview(tableView)
     }
-    private func configNavigation() {
+    private func configSearchController() {
+        searchController.hidesNavigationBarDuringPresentation = true
+        searchController.searchBar.placeholder = "game name... ex: terraria, dota, touhou"
         navigationItem.searchController = searchController
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    private func configNavigation() {
+        navigationController?.navigationBar.prefersLargeTitles = true
         title = "Games"
     }
     private func configConstraints() {
@@ -50,8 +53,19 @@ class HomeViewController: UIViewController {
         ]
         NSLayoutConstraint.activate(constraints)
     }
-    private func loadGames() {
-        Service.getGames { [weak self] games, errorStatus in
+    private func configRx() {
+        searchController.searchBar.rx.text
+            .orEmpty
+            .debounce(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
+            .distinctUntilChanged()
+            .subscribe(onNext: { [weak self] searchText in
+                guard let self = self else { return }
+                self.loadGames(searchText: searchText)
+            })
+            .disposed(by: disposeBag)
+    }
+    private func loadGames(searchText: String) {
+        Service.getGames(searchText: searchText) { [weak self] games, errorStatus in
             guard let self = self else { return }
             if errorStatus != nil {
                 // TODO: kasih alert
