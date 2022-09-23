@@ -93,4 +93,11 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         }
        return UITableViewCell()
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let game = games[indexPath.row]
+        let detailVC = GameDetailViewController()
+        detailVC.configGame(game: game)
+        navigationController?.pushViewController(detailVC, animated: true)
+        print(game.name)
+    }
 }

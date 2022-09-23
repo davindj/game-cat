@@ -9,3 +9,8 @@ enum ServiceGetAllDataErrorStatus {
     case none
     case unknown
 }
+
+enum ServiceGetGameDetailErrorStatus {
+    case none
+    case unknown
+}
