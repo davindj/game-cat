@@ -1,5 +1,5 @@
 //
-//  RatingView.swift
+//  GameDetailRatingView.swift
 //  Game Cat
 //
 //  Created by Davin Djayadi on 23/09/22.
@@ -15,7 +15,7 @@ struct RatingPercentage {
     let starPercentage1: Float
 }
 
-class RatingView: UIView {
+class GameDetailRatingView: UIView {
     private let labelSubHeaderRatings: UILabel = UILabel.initLabelSubHeader(text: "Ratings")
     private let labelRatingAverage: UILabel = UILabel.initLabelLargeText(text: "3.5")
     private let labelOutOf5: UILabel = UILabel.initLabelSecondary(text: "out of 5")
@@ -64,10 +64,10 @@ class RatingView: UIView {
         labelRatingCountDecoration.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            labelSubHeaderRatings.topAnchor.constraint(equalTo: topAnchor),
-            labelSubHeaderRatings.leadingAnchor.constraint(equalTo: leadingAnchor),
+            labelSubHeaderRatings.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            labelSubHeaderRatings.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             labelRatingAverage.topAnchor.constraint(equalTo: labelSubHeaderRatings.bottomAnchor),
-            labelRatingAverage.leadingAnchor.constraint(equalTo: leadingAnchor),
+            labelRatingAverage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             labelOutOf5.topAnchor.constraint(equalTo: labelRatingAverage.bottomAnchor),
             labelOutOf5.centerXAnchor.constraint(equalTo: labelRatingAverage.centerXAnchor),
             
@@ -87,7 +87,7 @@ class RatingView: UIView {
             progView5Star.topAnchor.constraint(equalTo: labelSubHeaderRatings.bottomAnchor, constant: 5),
             progView5Star.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
             progView5Star.heightAnchor.constraint(equalToConstant: 4),
-            progView5Star.trailingAnchor.constraint(equalTo: trailingAnchor),
+            progView5Star.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             progView4Star.topAnchor.constraint(equalTo: progView5Star.bottomAnchor, constant: 5),
             progView3Star.topAnchor.constraint(equalTo: progView4Star.bottomAnchor, constant: 5),
             progView2Star.topAnchor.constraint(equalTo: progView3Star.bottomAnchor, constant: 5),
@@ -96,7 +96,7 @@ class RatingView: UIView {
             labelRatingCount.topAnchor.constraint(equalTo: progView1Star.bottomAnchor, constant: 5),
             labelRatingCount.trailingAnchor.constraint(equalTo: labelRatingCountDecoration.leadingAnchor, constant: -5),
             labelRatingCountDecoration.topAnchor.constraint(equalTo: labelRatingCount.topAnchor),
-            labelRatingCountDecoration.trailingAnchor.constraint(equalTo: trailingAnchor),
+            labelRatingCountDecoration.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
             bottomAnchor.constraint(equalTo: labelOutOf5.bottomAnchor)
         ])
