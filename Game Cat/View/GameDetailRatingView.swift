@@ -19,11 +19,31 @@ class GameDetailRatingView: UIView {
     private let labelSubHeaderRatings: UILabel = UILabel.initLabelSubHeader(text: "Ratings")
     private let labelRatingAverage: UILabel = UILabel.initLabelLargeText(text: "3.5")
     private let labelOutOf5: UILabel = UILabel.initLabelSecondary(text: "out of 5")
+    private let progStarStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.spacing = 5
+        return stackView
+    }()
     private let progView5Star: UIProgressView = UIProgressView.initProgressView()
     private let progView4Star: UIProgressView = UIProgressView.initProgressView()
     private let progView3Star: UIProgressView = UIProgressView.initProgressView()
     private let progView2Star: UIProgressView = UIProgressView.initProgressView()
     private let progView1Star: UIProgressView = UIProgressView.initProgressView()
+    private let imgStarStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fill
+        stackView.alignment = .trailing
+        stackView.spacing = 0
+        return stackView
+    }()
+    private let star5StackView: UIStackView = UIStackView.initStarStackView(nStar: 5)
+    private let star4StackView: UIStackView = UIStackView.initStarStackView(nStar: 4)
+    private let star3StackView: UIStackView = UIStackView.initStarStackView(nStar: 3)
+    private let star2StackView: UIStackView = UIStackView.initStarStackView(nStar: 2)
+    private let star1StackView: UIStackView = UIStackView.initStarStackView(nStar: 1)
     private let labelRatingCount: UILabel = UILabel.initLabelPrimary(text: "3.5")
     private let labelRatingCountDecoration: UILabel = UILabel.initLabelSecondary(text: "Ratings")
     
@@ -36,30 +56,40 @@ class GameDetailRatingView: UIView {
         configConstraints()
     }
     private func configDefaultData() {
-        print("config default data")
+        progView5Star.progress = 0
+        progView4Star.progress = 0
+        progView3Star.progress = 0
+        progView2Star.progress = 0
+        progView1Star.progress = 0
     }
     private func configViewHierarchy() {
         addSubview(labelSubHeaderRatings)
         addSubview(labelRatingAverage)
         addSubview(labelOutOf5)
-        addSubview(progView5Star)
-        addSubview(progView4Star)
-        addSubview(progView3Star)
-        addSubview(progView2Star)
-        addSubview(progView1Star)
+        addSubview(progStarStackView)
+        addSubview(imgStarStackView)
         addSubview(labelRatingCount)
         addSubview(labelRatingCountDecoration)
+        
+        progStarStackView.addArrangedSubview(progView5Star)
+        progStarStackView.addArrangedSubview(progView4Star)
+        progStarStackView.addArrangedSubview(progView3Star)
+        progStarStackView.addArrangedSubview(progView2Star)
+        progStarStackView.addArrangedSubview(progView1Star)
+        
+        imgStarStackView.addArrangedSubview(star5StackView)
+        imgStarStackView.addArrangedSubview(star4StackView)
+        imgStarStackView.addArrangedSubview(star3StackView)
+        imgStarStackView.addArrangedSubview(star2StackView)
+        imgStarStackView.addArrangedSubview(star1StackView)
     }
     private func configConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
         labelSubHeaderRatings.translatesAutoresizingMaskIntoConstraints = false
         labelRatingAverage.translatesAutoresizingMaskIntoConstraints = false
         labelOutOf5.translatesAutoresizingMaskIntoConstraints = false
-        progView5Star.translatesAutoresizingMaskIntoConstraints = false
-        progView4Star.translatesAutoresizingMaskIntoConstraints = false
-        progView3Star.translatesAutoresizingMaskIntoConstraints = false
-        progView2Star.translatesAutoresizingMaskIntoConstraints = false
-        progView1Star.translatesAutoresizingMaskIntoConstraints = false
+        progStarStackView.translatesAutoresizingMaskIntoConstraints = false
+        imgStarStackView.translatesAutoresizingMaskIntoConstraints = false
         labelRatingCount.translatesAutoresizingMaskIntoConstraints = false
         labelRatingCountDecoration.translatesAutoresizingMaskIntoConstraints = false
 
@@ -71,29 +101,21 @@ class GameDetailRatingView: UIView {
             labelOutOf5.topAnchor.constraint(equalTo: labelRatingAverage.bottomAnchor),
             labelOutOf5.centerXAnchor.constraint(equalTo: labelRatingAverage.centerXAnchor),
             
-            progView4Star.widthAnchor.constraint(equalTo: progView5Star.widthAnchor),
-            progView3Star.widthAnchor.constraint(equalTo: progView5Star.widthAnchor),
-            progView2Star.widthAnchor.constraint(equalTo: progView5Star.widthAnchor),
-            progView1Star.widthAnchor.constraint(equalTo: progView5Star.widthAnchor),
-            progView4Star.heightAnchor.constraint(equalTo: progView5Star.heightAnchor),
-            progView3Star.heightAnchor.constraint(equalTo: progView5Star.heightAnchor),
-            progView2Star.heightAnchor.constraint(equalTo: progView5Star.heightAnchor),
-            progView1Star.heightAnchor.constraint(equalTo: progView5Star.heightAnchor),
-            progView4Star.trailingAnchor.constraint(equalTo: progView5Star.trailingAnchor),
-            progView3Star.trailingAnchor.constraint(equalTo: progView5Star.trailingAnchor),
-            progView2Star.trailingAnchor.constraint(equalTo: progView5Star.trailingAnchor),
-            progView1Star.trailingAnchor.constraint(equalTo: progView5Star.trailingAnchor),
-
-            progView5Star.topAnchor.constraint(equalTo: labelSubHeaderRatings.bottomAnchor, constant: 5),
-            progView5Star.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
-            progView5Star.heightAnchor.constraint(equalToConstant: 4),
-            progView5Star.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            progView4Star.topAnchor.constraint(equalTo: progView5Star.bottomAnchor, constant: 5),
-            progView3Star.topAnchor.constraint(equalTo: progView4Star.bottomAnchor, constant: 5),
-            progView2Star.topAnchor.constraint(equalTo: progView3Star.bottomAnchor, constant: 5),
-            progView1Star.topAnchor.constraint(equalTo: progView2Star.bottomAnchor, constant: 5),
+            progStarStackView.topAnchor.constraint(equalTo: labelSubHeaderRatings.bottomAnchor, constant: 5),
+            progStarStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            progStarStackView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
             
-            labelRatingCount.topAnchor.constraint(equalTo: progView1Star.bottomAnchor, constant: 5),
+            imgStarStackView.topAnchor.constraint(equalTo: labelSubHeaderRatings.bottomAnchor, constant: 3),
+            imgStarStackView.trailingAnchor.constraint(equalTo: progStarStackView.leadingAnchor, constant: -5),
+            imgStarStackView.widthAnchor.constraint(equalTo: star5StackView.widthAnchor, multiplier: 1),
+
+            progView5Star.heightAnchor.constraint(equalToConstant: 4),
+            progView4Star.heightAnchor.constraint(equalTo: progView5Star.heightAnchor, multiplier: 1),
+            progView3Star.heightAnchor.constraint(equalTo: progView5Star.heightAnchor, multiplier: 1),
+            progView2Star.heightAnchor.constraint(equalTo: progView5Star.heightAnchor, multiplier: 1),
+            progView1Star.heightAnchor.constraint(equalTo: progView5Star.heightAnchor, multiplier: 1),
+            
+            labelRatingCount.topAnchor.constraint(equalTo: progStarStackView.bottomAnchor, constant: 5),
             labelRatingCount.trailingAnchor.constraint(equalTo: labelRatingCountDecoration.leadingAnchor, constant: -5),
             labelRatingCountDecoration.topAnchor.constraint(equalTo: labelRatingCount.topAnchor),
             labelRatingCountDecoration.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
