@@ -1,5 +1,5 @@
 //
-//  GameInformationView.swift
+//  GameDetailInformationView.swift
 //  Game Cat
 //
 //  Created by Davin Djayadi on 09/10/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GameInformationView: UIView {
+class GameDetailInformationView: UIView {
     private let labelDevelopers: UILabel = UILabel.initLabelSecondary(text: "Developer")
     private let labelDevelopersValue: UILabel = UILabel.initLabelPrimary()
     private let labelPublishers: UILabel = UILabel.initLabelSecondary(text: "Publisher")

@@ -18,7 +18,7 @@ class GameDetailViewController: UIViewController {
         return stackView
     }()
     private let gameDetailHeaderView: GameDetailHeaderView = GameDetailHeaderView()
-    private let gameInformationView: GameInformationView = GameInformationView()
+    private let gameDetailInformationView: GameDetailInformationView = GameDetailInformationView()
     private let gameDetailDescriptionView: GameDetailDescriptionView = GameDetailDescriptionView()
     private let gameDetailTagView: GameDetailTagView = GameDetailTagView()
     private let gameDetailRatingView: GameDetailRatingView = GameDetailRatingView()
@@ -43,7 +43,7 @@ class GameDetailViewController: UIViewController {
         scrollView.addSubview(stackView)
 
         stackView.addArrangedSubview(gameDetailHeaderView)
-        stackView.addArrangedSubview(gameInformationView)
+        stackView.addArrangedSubview(gameDetailInformationView)
         stackView.addArrangedSubview(gameDetailDescriptionView)
         stackView.addArrangedSubview(gameDetailTagView)
         stackView.addArrangedSubview(gameDetailRatingView)
@@ -107,7 +107,7 @@ class GameDetailViewController: UIViewController {
     }
     private func displayGameDetail(gameDetail: GameDetail) {
         // Information
-        gameInformationView.configValue(developers: gameDetail.developers,
+        gameDetailInformationView.configValue(developers: gameDetail.developers,
                                         publishers: gameDetail.publishers,
                                         releasedAt: game.released,
                                         updatedAt: gameDetail.updatedDate)
