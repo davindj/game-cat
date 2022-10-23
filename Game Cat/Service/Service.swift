@@ -10,8 +10,8 @@ import UIKit
 struct Service {
     private static let HOST = "https://api.rawg.io"
     private static let APIKEY = "your_apikey"
+    
     static func getGames(searchText: String, callback: @escaping([Game], ServiceGetAllDataErrorStatus?) -> Void) {
-        // TODO: cache search result + core data
         guard var components = URLComponents(string: "\(HOST)/api/games") else { return }
         components.queryItems = [
             URLQueryItem(name: "key", value: APIKEY),
@@ -39,7 +39,6 @@ struct Service {
         task.resume()
     }
     static func getGameDetail(gameId: Int, callback: @escaping(GameDetail?, ServiceGetGameDetailErrorStatus?) -> Void) {
-        // TODO: cache search result + core data
         guard var components = URLComponents(string: "\(HOST)/api/games/\(gameId)") else { return }
         components.queryItems = [
             URLQueryItem(name: "key", value: APIKEY)
