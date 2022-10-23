@@ -53,9 +53,31 @@ class FavoriteViewController: UIViewController {
             self.games = cdgames
         } catch {
             self.showAlert(title: "Core Data cannot be loaded", message: "favorite feature may not working properly")
-            return
+        }
+        if self.games.isEmpty {
+            showNoDataLabel()
+        } else {
+            hideNoDataLabel()
         }
         self.tableView.reloadData()
+    }
+    
+    private func showNoDataLabel() {
+        let labelNoData = UILabel(frame: CGRect(x: 0,
+                                                y: 0,
+                                                width: tableView.bounds.size.width,
+                                                height: tableView.bounds.size.height))
+        labelNoData.text = "No favorite game\n\nyou can add favorite by\ngo to game detail and press 💜"
+        labelNoData.textColor = .black
+        labelNoData.textAlignment = .center
+        labelNoData.numberOfLines = 0
+        tableView.separatorStyle = .none
+        tableView.backgroundView = labelNoData
+    }
+    
+    private func hideNoDataLabel() {
+        tableView.separatorStyle = .singleLine
+        tableView.backgroundView = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +86,10 @@ class FavoriteViewController: UIViewController {
 }
 
 extension FavoriteViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return games.isEmpty ? 0 : 1
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return games.count
     }

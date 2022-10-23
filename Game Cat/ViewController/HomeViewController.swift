@@ -48,7 +48,7 @@ class HomeViewController: UIViewController {
     
     private func configNavigation() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Games"
+        navigationItem.title = "Games"
     }
     
     private func configConstraints() {
@@ -103,7 +103,31 @@ class HomeViewController: UIViewController {
             let cdgame = cdgames.first { $0.id == game.id }
             return GameTableItem(game: game, coredata: cdgame)
         }
+        if self.gameTableItems.isEmpty {
+            showNoDataLabel()
+        } else {
+            hideNoDataLabel()
+        }
         self.tableView.reloadData()
+        self.tableView.reloadData()
+    }
+    
+    private func showNoDataLabel() {
+        let labelNoData = UILabel(frame: CGRect(x: 0,
+                                                y: 0,
+                                                width: tableView.bounds.size.width,
+                                                height: tableView.bounds.size.height))
+        labelNoData.text = "No game found"
+        labelNoData.textColor = .black
+        labelNoData.textAlignment = .center
+        labelNoData.numberOfLines = 0
+        tableView.separatorStyle = .none
+        tableView.backgroundView = labelNoData
+    }
+    
+    private func hideNoDataLabel() {
+        tableView.separatorStyle = .singleLine
+        tableView.backgroundView = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,6 +136,10 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return gameTableItems.isEmpty ? 0 : 1
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return gameTableItems.count
     }
