@@ -16,6 +16,8 @@
 		D76B0CC829044AEE00CC39A0 /* CDGame+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B0CC629044AEE00CC39A0 /* CDGame+CoreDataClass.swift */; };
 		D76B0CC929044AEE00CC39A0 /* CDGame+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B0CC729044AEE00CC39A0 /* CDGame+CoreDataProperties.swift */; };
 		D76B0CCB290451E800CC39A0 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B0CCA290451E800CC39A0 /* UIViewController.swift */; };
+		D76B0CCD2905636C00CC39A0 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B0CCC2905636C00CC39A0 /* MainTabBarController.swift */; };
+		D76B0CCF290563FA00CC39A0 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76B0CCE290563FA00CC39A0 /* FavoriteViewController.swift */; };
 		D76BE3B228DC57D400F44C3D /* GameDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76BE3B128DC57D400F44C3D /* GameDetailViewController.swift */; };
 		D76D8F8828DB421500A0E98D /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D8F8728DB421500A0E98D /* Cache.swift */; };
 		D76D8F9028DB581700A0E98D /* Game_CatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76D8F8F28DB581700A0E98D /* Game_CatTests.swift */; };
@@ -64,6 +66,8 @@
 		D76B0CC629044AEE00CC39A0 /* CDGame+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDGame+CoreDataClass.swift"; sourceTree = "<group>"; };
 		D76B0CC729044AEE00CC39A0 /* CDGame+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDGame+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		D76B0CCA290451E800CC39A0 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		D76B0CCC2905636C00CC39A0 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		D76B0CCE290563FA00CC39A0 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
 		D76BE3B128DC57D400F44C3D /* GameDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDetailViewController.swift; sourceTree = "<group>"; };
 		D76D8F8728DB421500A0E98D /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		D76D8F8D28DB581700A0E98D /* Game CatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Game CatTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -228,8 +232,10 @@
 		D7FBFB5E28D737A200DEDF11 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				D76B0CCC2905636C00CC39A0 /* MainTabBarController.swift */,
 				D7FBFB6128D74E6000DEDF11 /* HomeViewController.swift */,
 				D76BE3B128DC57D400F44C3D /* GameDetailViewController.swift */,
+				D76B0CCE290563FA00CC39A0 /* FavoriteViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -482,6 +488,7 @@
 				D7B41AC529013E210074FE3F /* GameDetailDescriptionView.swift in Sources */,
 				D7FBFB4828D72F0800DEDF11 /* AppDelegate.swift in Sources */,
 				D7471F7128DAE5AF007A6460 /* ServicePayload.swift in Sources */,
+				D76B0CCF290563FA00CC39A0 /* FavoriteViewController.swift in Sources */,
 				D7E7620F28DD45A5009217DC /* GameDetail.swift in Sources */,
 				D72F090428DADB2A001BC174 /* Service.swift in Sources */,
 				D7DCEB7F29043FAC002A4302 /* PersistentContainer.swift in Sources */,
@@ -492,6 +499,7 @@
 				D7FBFB6528D77C6C00DEDF11 /* GameTableViewCell.swift in Sources */,
 				D7DCEB7929040C84002A4302 /* UIStackView.swift in Sources */,
 				D76B0CC829044AEE00CC39A0 /* CDGame+CoreDataClass.swift in Sources */,
+				D76B0CCD2905636C00CC39A0 /* MainTabBarController.swift in Sources */,
 				D76B0CCB290451E800CC39A0 /* UIViewController.swift in Sources */,
 				D7E7621728DD97C4009217DC /* UIProgressView.swift in Sources */,
 				D7DCEB7C290436D6002A4302 /* GameCat.xcdatamodeld in Sources */,

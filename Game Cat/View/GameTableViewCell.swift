@@ -62,7 +62,7 @@ class GameTableViewCell: UITableViewCell {
     private let imgViewFavorite: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "heart.fill")
-        imageView.tintColor = UIColor(rgb: 0x999999)
+        imageView.tintColor = UIColor.primaryColor
         return imageView
     }()
     private let spacer: UIView = UIView()
@@ -120,8 +120,7 @@ class GameTableViewCell: UITableViewCell {
             
             imgViewFavorite.centerYAnchor.constraint(equalTo: centerYAnchor),
             imgViewFavorite.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            imgViewFavorite.widthAnchor.constraint(equalToConstant: 16),
-            imgViewFavorite.heightAnchor.constraint(equalTo: imgViewFavorite.widthAnchor),
+            imgViewFavorite.widthAnchor.constraint(equalToConstant: 24),
             
             spacer.heightAnchor.constraint(equalToConstant: 5),
             spacerRating.widthAnchor.constraint(equalToConstant: 10),

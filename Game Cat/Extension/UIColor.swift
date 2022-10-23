@@ -23,4 +23,8 @@ extension UIColor {
             blue: rgb & 0xFF
         )
     }
+    
+    static var primaryColor: UIColor {
+        return UIColor(rgb: 0x7540B1)
+    }
  }
