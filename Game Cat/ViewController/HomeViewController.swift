@@ -15,10 +15,15 @@ struct GameTableItem {
 }
 
 class HomeViewController: UIViewController {
+    // Const
     private static let CELLNAME: String = "gameCell"
+    // Var
     private var gameTableItems: [GameTableItem] = []
     private var disposeBag: DisposeBag = DisposeBag()
-    
+    // Components
+    private let aboutDeveloperBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "person.circle"),
+                                                                               style: .plain,
+                                                                               target: nil, action: nil)
     private var searchController: UISearchController = UISearchController(searchResultsController: nil)
     private var tableView: UITableView = UITableView()
 
@@ -49,6 +54,7 @@ class HomeViewController: UIViewController {
     private func configNavigation() {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.title = "Games"
+        navigationItem.rightBarButtonItem = aboutDeveloperBarButtonItem
     }
     
     private func configConstraints() {
@@ -71,6 +77,14 @@ class HomeViewController: UIViewController {
             .subscribe(onNext: { [weak self] searchText in
                 guard let self = self else { return }
                 self.loadGames(searchText: searchText)
+            })
+            .disposed(by: disposeBag)
+        
+        aboutDeveloperBarButtonItem.rx.tap
+            .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.navigateToAboutDeveloperPage()
             })
             .disposed(by: disposeBag)
     }
@@ -128,6 +142,11 @@ class HomeViewController: UIViewController {
     private func hideNoDataLabel() {
         tableView.separatorStyle = .singleLine
         tableView.backgroundView = nil
+    }
+    
+    private func navigateToAboutDeveloperPage() {
+        let aboutDevVc = AboutDeveloperViewController()
+        navigationController?.pushViewController(aboutDevVc, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
