@@ -9,9 +9,14 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+struct GameTableItem {
+    let game: Game
+    let coredata: CDGame?
+}
+
 class HomeViewController: UIViewController {
     private static let CELLNAME: String = "gameCell"
-    private var games: [Game] = []
+    private var gameTableItems: [GameTableItem] = []
     private var disposeBag: DisposeBag = DisposeBag()
     
     private var searchController: UISearchController = UISearchController(searchResultsController: nil)
@@ -26,22 +31,26 @@ class HomeViewController: UIViewController {
         configConstraints()
         configRx()
     }
+    
     private func configTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(GameTableViewCell.self, forCellReuseIdentifier: HomeViewController.CELLNAME)
         self.view.addSubview(tableView)
     }
+    
     private func configSearchController() {
         searchController.hidesNavigationBarDuringPresentation = true
         searchController.searchBar.placeholder = "game name... ex: terraria, dota, touhou"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
     }
+    
     private func configNavigation() {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Games"
     }
+    
     private func configConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.frame = UIScreen.main.bounds
@@ -53,6 +62,7 @@ class HomeViewController: UIViewController {
         ]
         NSLayoutConstraint.activate(constraints)
     }
+    
     private func configRx() {
         searchController.searchBar.rx.text
             .orEmpty
@@ -64,40 +74,69 @@ class HomeViewController: UIViewController {
             })
             .disposed(by: disposeBag)
     }
+    
     private func loadGames(searchText: String) {
         Service.getGames(searchText: searchText) { [weak self] games, errorStatus in
             guard let self = self else { return }
             if errorStatus != nil {
-                // TODO: kasih alert
-                print("ada error boi")
+                DispatchQueue.main.async {
+                    self.showAlert(title: "Cannot load games", message: "please try again later")
+                }
                 return
             }
-            self.games = games
+            self.gameTableItems = games.map { GameTableItem(game: $0, coredata: nil) }
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.mapAndReloadGameTableItemsWithFavorite()
             }
         }
+    }
+    
+    private func mapAndReloadGameTableItemsWithFavorite() {
+        var cdgames: [CDGame] = []
+        do {
+            cdgames = try self.container?.getGames() ?? []
+        } catch {
+            self.showAlert(title: "Core Data cannot be loaded", message: "favorite feature may not working properly")
+        }
+        self.gameTableItems = self.gameTableItems.map { gameTableItem in
+            let game = gameTableItem.game
+            let cdgame = cdgames.first { $0.id == game.id }
+            return GameTableItem(game: game, coredata: cdgame)
+        }
+        self.tableView.reloadData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        mapAndReloadGameTableItemsWithFavorite()
     }
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return games.count
+        return gameTableItems.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: HomeViewController.CELLNAME, for: indexPath) as? GameTableViewCell {
-            let game = games[indexPath.row]
-            cell.initValue(game: game)
+            let gameTabItem = gameTableItems[indexPath.row]
+            if let cdgame = gameTabItem.coredata { // is favorite
+                cell.initValueFavorite(cdgame: cdgame)
+            } else {
+                cell.initValue(game: gameTabItem.game)
+            }
             return cell
         }
-       return UITableViewCell()
+        return UITableViewCell()
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let game = games[indexPath.row]
+        let gameTableItem = gameTableItems[indexPath.row]
         let detailVC = GameDetailViewController()
-        detailVC.configGame(game: game)
+        if let cdGame = gameTableItem.coredata {
+            detailVC.configFavoriteGame(game: cdGame.toGame(), gameDetail: cdGame.toGameDetail())
+        } else {
+            detailVC.configGame(game: gameTableItem.game)
+        }
         navigationController?.pushViewController(detailVC, animated: true)
-        print(game.name)
     }
 }

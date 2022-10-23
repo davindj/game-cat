@@ -6,9 +6,32 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+
+enum AddToFavoriteError: Error {
+    case containerNotLoaded
+    case gameDetailNotLoaded
+    case failedToSaveContext
+}
+
+enum RemoveFromFavoriteError: Error {
+    case containerNotLoaded
+    case gameNotFavorite
+    case failedToSaveContext
+}
 
 class GameDetailViewController: UIViewController {
+    // PARAM
     private var game: Game!
+    private var isFavorite: Bool = false
+    
+    // Var
+    private var gameDetail: GameDetail?
+    private let disposeBag: DisposeBag = DisposeBag()
+    
+    // Components
+    private let favoriteBarButtonItem: UIBarButtonItem = UIBarButtonItem(image: nil, style: .plain, target: nil, action: nil)
     private let scrollView: UIScrollView = UIScrollView()
     private let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -24,9 +47,11 @@ class GameDetailViewController: UIViewController {
     private let gameDetailRatingView: GameDetailRatingView = GameDetailRatingView()
     private let gameDetailStoreView: GameDetailStoreView = GameDetailStoreView()
     
+    // Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         configViewController()
+        configNavBar()
         configViewHierarchy()
         configConstraints()
         displayGameData()
@@ -38,10 +63,112 @@ class GameDetailViewController: UIViewController {
         UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).adjustsFontSizeToFitWidth = true
     }
     
+    private func configNavBar() {
+        self.refreshFavoriteBarBtn()
+        favoriteBarButtonItem.rx.tap
+            .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                if !self.isFavorite {
+                    self.tryAddToFavorite()
+                } else {
+                    self.tryRemoveFromFavorite()
+                }
+            })
+            .disposed(by: disposeBag)
+        navigationItem.rightBarButtonItem = favoriteBarButtonItem
+    }
+    
+    private func refreshFavoriteBarBtn() {
+        favoriteBarButtonItem.image = UIImage(systemName: isFavorite ? "heart.fill" : "heart")
+    }
+    
+    private func toggleFavoriteOn() {
+        isFavorite = true
+        self.refreshFavoriteBarBtn()
+    }
+    
+    private func toggleFavoriteOff() {
+        isFavorite = false
+        self.refreshFavoriteBarBtn()
+    }
+    
+    private func tryAddToFavorite() {
+        do {
+            try self.addToFavorite()
+            DispatchQueue.main.async {
+                self.toggleFavoriteOn()
+            }
+        } catch {
+            DispatchQueue.main.async {
+                switch error {
+                case AddToFavoriteError.containerNotLoaded:
+                    self.showAlert(title: "Core Data Not Loaded", message: "please try to reload the app")
+                case AddToFavoriteError.gameDetailNotLoaded:
+                    self.showAlert(title: "Game Detail Not Loaded", message: "please try again after game detail loaded")
+                case AddToFavoriteError.failedToSaveContext:
+                    self.showAlert(title: "Couldn't Add Game to Favorites", message: "please try to reload the app")
+                default:
+                    self.showAlert(title: "Unknown Error", message: "please try to reload the app")
+                }
+            }
+        }
+    }
+    
+    private func addToFavorite() throws {
+        guard let container = self.container else {
+            throw AddToFavoriteError.containerNotLoaded
+        }
+        guard let gameDetail = self.gameDetail else {
+            throw AddToFavoriteError.gameDetailNotLoaded
+        }
+        do {
+            try container.saveGame(game: game, detail: gameDetail)
+        } catch PersistentContainerSaveContextError.failedToSaveContext {
+            throw AddToFavoriteError.failedToSaveContext
+        }
+    }
+    
+    private func tryRemoveFromFavorite() {
+        do {
+            try self.removeFromFavorite()
+            DispatchQueue.main.async {
+                self.toggleFavoriteOff()
+            }
+        } catch {
+            DispatchQueue.main.async {
+                switch error {
+                case RemoveFromFavoriteError.containerNotLoaded:
+                    self.showAlert(title: "Core Data Not Loaded", message: "please try to reload the app")
+                case RemoveFromFavoriteError.gameNotFavorite:
+                    self.showAlert(title: "Game Not in Favorites", message: "please try to re-open detail page")
+                case RemoveFromFavoriteError.failedToSaveContext:
+                    self.showAlert(title: "Game Not in Favorites", message: "please try to re-open detail page")
+                default:
+                    self.showAlert(title: "Unknown Error", message: "please reload the app")
+                }
+            }
+        }
+    }
+    
+    private func removeFromFavorite() throws {
+        guard let container = self.container else {
+            throw RemoveFromFavoriteError.containerNotLoaded
+        }
+        do {
+            let gameId = Int64(game.id)
+            try container.deleteGame(gameId: gameId)
+        } catch PersistentContainerDeleteGameError.gameNotFound {
+            throw RemoveFromFavoriteError.gameNotFavorite
+        } catch PersistentContainerSaveContextError.failedToSaveContext {
+            throw RemoveFromFavoriteError.failedToSaveContext
+        }
+    }
+    
     private func configViewHierarchy() {
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
-
+        
         stackView.addArrangedSubview(gameDetailHeaderView)
         stackView.addArrangedSubview(gameDetailInformationView)
         stackView.addArrangedSubview(gameDetailDescriptionView)
@@ -49,7 +176,7 @@ class GameDetailViewController: UIViewController {
         stackView.addArrangedSubview(gameDetailRatingView)
         stackView.addArrangedSubview(gameDetailStoreView)
     }
-        
+    
     private func configConstraints() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -72,7 +199,11 @@ class GameDetailViewController: UIViewController {
                 self.displayGameHeader(genres: genres, image: image)
             }
         }
-        loadGameDetail()
+        if gameDetail == nil {
+            loadGameDetail()
+        } else {
+            displayGameDetail()
+        }
     }
     
     private func loadGameHeader(callback: @escaping (UIImage?) -> Void) {
@@ -95,22 +226,24 @@ class GameDetailViewController: UIViewController {
         Service.getGameDetail(gameId: game.id) { [weak self] gameDetail, error in
             guard let self = self else { return }
             if error != nil {
-                // TODO: handle erro load game detail dan kasih alert
-                print("Load game detail failed")
+                DispatchQueue.main.async {
+                    self.showAlert(title: "Game Detail cannot be loaded", message: "please try to reload by re-open this page")
+                }
                 return
             }
-            guard let gameDetail = gameDetail else { return }
+            self.gameDetail = gameDetail
             DispatchQueue.main.async {
-                self.displayGameDetail(gameDetail: gameDetail)
+                self.displayGameDetail()
             }
         }
     }
-    private func displayGameDetail(gameDetail: GameDetail) {
+    private func displayGameDetail() {
+        guard let gameDetail = self.gameDetail else { return }
         // Information
         gameDetailInformationView.configValue(developers: gameDetail.developers,
-                                        publishers: gameDetail.publishers,
-                                        releasedAt: game.released,
-                                        updatedAt: gameDetail.updatedDate)
+                                              publishers: gameDetail.publishers,
+                                              releasedAt: game.released,
+                                              updatedAt: gameDetail.updatedDate)
         
         // Description
         let descriptions = gameDetail.description.components(separatedBy: "\n")
@@ -135,14 +268,12 @@ class GameDetailViewController: UIViewController {
     // MARK: Public Function
     func configGame(game: Game) {
         self.game = game
+        toggleFavoriteOff()
     }
-}
-
-extension GameDetailViewController {
-    private static func initImgViewStar() -> UIImageView {
-        let imgView = UIImageView()
-        imgView.image = UIImage(systemName: "star.fill")
-        imgView.tintColor = UIColor(rgb: 0x999999)
-        return imgView
+    
+    func configFavoriteGame(game: Game, gameDetail: GameDetail) {
+        self.game = game
+        self.gameDetail = gameDetail
+        toggleFavoriteOn()
     }
 }
