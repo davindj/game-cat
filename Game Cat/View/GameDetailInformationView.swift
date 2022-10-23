@@ -90,8 +90,8 @@ class GameDetailInformationView: UIView {
     }
     
     func configValue(developers: [String], publishers: [String], releasedAt: String?, updatedAt: String?) {
-        let developersStr = developers.joined(separator: "\n")
-        let publishersStr = publishers.joined(separator: "\n")
+        let developersStr = developers.isEmpty ? "-" : developers.joined(separator: "\n")
+        let publishersStr = publishers.isEmpty ? "-" : publishers.joined(separator: "\n")
         let releasedDateStr = releasedAt ?? "-"
         let updatedDateStr = updatedAt ?? "-"
         displayData(dev: developersStr, pub: publishersStr, rel: releasedDateStr, upd: updatedDateStr)

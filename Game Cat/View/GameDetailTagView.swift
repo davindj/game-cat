@@ -45,6 +45,6 @@ class GameDetailTagView: UIView {
     }
     
     func configValue(tags: [String]) {
-        labelTags.text = tags.joined(separator: " . ")
+        labelTags.text = tags.isEmpty ? "-" : tags.joined(separator: " . ")
     }
 }

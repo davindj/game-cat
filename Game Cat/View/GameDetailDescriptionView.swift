@@ -38,7 +38,7 @@ class GameDetailDescriptionView: UIView {
     }
     
     func configValue(descriptions: [String]) {
-        let desc = descriptions.joined(separator: "\n\n")
+        let desc = descriptions.isEmpty ? "-" : descriptions.joined(separator: "\n\n")
         labelGameDescription.text = desc
     }
 }

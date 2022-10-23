@@ -49,6 +49,6 @@ class GameDetailHeaderView: UIView {
     
     func configValue(genres: [String], image: UIImage) {
         imgViewGame.image = image
-        labelGameGenres.text = genres.joined(separator: " . ")
+        labelGameGenres.text = genres.isEmpty ? "-" : genres.joined(separator: " . ")
     }
 }

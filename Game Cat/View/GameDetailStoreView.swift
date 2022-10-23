@@ -47,6 +47,6 @@ class GameDetailStoreView: UIView {
     }
     
     func configValue(stores: [String]) {
-        labelStores.text = stores.joined(separator: "\n")
+        labelStores.text = stores.isEmpty ? "-" : stores.joined(separator: "\n")
     }
 }
