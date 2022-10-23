@@ -46,5 +46,6 @@ class PersistentContainer: NSPersistentContainer {
         for delGame in deletedGames {
             viewContext.delete(delGame)
         }
+        try saveContext()
     }
 }
