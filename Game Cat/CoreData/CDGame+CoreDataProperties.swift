@@ -9,9 +9,7 @@
 import Foundation
 import CoreData
 
-
 extension CDGame {
-
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CDGame> {
         return NSFetchRequest<CDGame>(entityName: "CDGame")
     }
@@ -20,7 +18,7 @@ extension CDGame {
     @NSManaged public var descriptionGame: String?
     @NSManaged public var developers: [String]?
     @NSManaged public var genres: [String]?
-    @NSManaged public var id: Int16
+    @NSManaged public var id: Int64
     @NSManaged public var name: String?
     @NSManaged public var publishers: [String]?
     @NSManaged public var rating: Double
@@ -29,11 +27,11 @@ extension CDGame {
     @NSManaged public var released: String?
     @NSManaged public var stores: [String]?
     @NSManaged public var tags: [String]?
-    @NSManaged public var totalRating: Int16
+    @NSManaged public var totalRating: Int64
     @NSManaged public var updatedDate: String?
 
 }
 
-extension CDGame : Identifiable {
+extension CDGame: Identifiable {
 
 }

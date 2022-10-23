@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21279" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Game" representedClassName="Game" syncable="YES" codeGenerationType="class">
+    <entity name="CDGame" representedClassName=".CDGame" syncable="YES">
         <attribute name="backgroundImage" optional="YES" attributeType="String"/>
         <attribute name="descriptionGame" attributeType="String"/>
-        <attribute name="developers" attributeType="Transformable" customClassName="[String]"/>
-        <attribute name="genres" attributeType="Transformable" customClassName="[String]"/>
-        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="developers" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="genres" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
-        <attribute name="publishers" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="publishers" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
         <attribute name="rating" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="ratingStarCounts" attributeType="Transformable" customClassName="[Int]"/>
-        <attribute name="ratingStarPercentages" attributeType="Transformable" customClassName="[Double]"/>
+        <attribute name="ratingStarCounts" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Int]"/>
+        <attribute name="ratingStarPercentages" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Double]"/>
         <attribute name="released" optional="YES" attributeType="String"/>
-        <attribute name="stores" attributeType="Transformable" customClassName="[String]"/>
-        <attribute name="tags" attributeType="Transformable" valueTransformerName="[String]"/>
-        <attribute name="totalRating" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="stores" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="tags" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="totalRating" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="updatedDate" optional="YES" attributeType="String"/>
     </entity>
 </model>
