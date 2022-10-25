@@ -18,4 +18,9 @@ extension UIViewController {
         alertController.addAction(UIAlertAction(title: "Ok", style: .default))
         self.present(alertController, animated: true)
     }
+    
+    func openExternalURL(urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
 }

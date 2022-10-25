@@ -142,24 +142,21 @@ class AboutDeveloperViewController: UIViewController {
         btnGithub.rx.tap
             .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
             .subscribe(onNext: {
-                guard let url = URL(string: "https://github.com/davindj") else { return }
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                self.openExternalURL(urlString: "https://github.com/davindj")
             })
             .disposed(by: disposeBag)
         
         btnInstagram.rx.tap
             .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
             .subscribe(onNext: {
-                guard let url = URL(string: "https://instagram.com/pindavin") else { return }
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                self.openExternalURL(urlString: "https://instagram.com/pindavin")
             })
             .disposed(by: disposeBag)
         
         btnLinkedin.rx.tap
             .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
             .subscribe(onNext: {
-                guard let url = URL(string: "https://www.linkedin.com/in/davin-djayadi") else { return }
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                self.openExternalURL(urlString: "https://www.linkedin.com/in/davin-djayadi")
             })
             .disposed(by: disposeBag)
     }
