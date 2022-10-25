@@ -8,8 +8,17 @@
 import UIKit
 
 struct Service {
-    private static let HOST = "https://api.rawg.io"
-    private static let APIKEY = "your_apikey"
+    private static let HOST: String = "https://api.rawg.io"
+    private static let APIKEY: String = {
+        guard let filePath = Bundle.main.path(forResource: "Info", ofType: "plist") else {
+            fatalError("Couldn't find file 'Info.plist'.")
+        }
+        let plist = NSDictionary(contentsOfFile: filePath)
+        guard let value = plist?.object(forKey: "RAWG_API_KEY") as? String else {
+            fatalError("Couldn't find key 'RAWG_API_KEY' in 'Info.plist'.")
+        }
+        return value
+    }()
     
     static func getGames(searchText: String, callback: @escaping([Game], ServiceGetAllDataErrorStatus?) -> Void) {
         guard var components = URLComponents(string: "\(HOST)/api/games") else { return }
