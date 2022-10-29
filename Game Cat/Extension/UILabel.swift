@@ -37,4 +37,11 @@ extension UILabel {
         label.text = text
         return label
     }
+    static func initFormLabel(text: String) -> UILabel {
+        let label = UILabel()
+//        label.font = UIFont.systemFont(ofSize: 48, weight: .bold)
+//        label.textColor = UIColor(rgb: 0x333333)
+        label.text = text
+        return label
+    }
 }

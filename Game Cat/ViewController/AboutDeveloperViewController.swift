@@ -11,34 +11,36 @@ import RxSwift
 
 class AboutDeveloperViewController: UIViewController {
     // Var
+    private var devProfile = DeveloperProfile.getDefaultFromUserDefault()
     private let disposeBag: DisposeBag = DisposeBag()
     // Components
     private let scrollView: UIScrollView = UIScrollView()
     private let contentView: UIView = UIView()
     private let imgDeveloper: UIImageView = {
         let imgView = UIImageView()
-        imgView.image = UIImage(named: "davin-djayadi")
         imgView.layer.cornerRadius = 40
         imgView.layer.masksToBounds = true
         return imgView
     }()
     private let labelDeveloper: UILabel = {
         let label = UILabel()
-        label.text = "Davin Djayadi"
         label.textColor = UIColor.primaryColor
         label.font = UIFont.boldSystemFont(ofSize: 32)
         return label
     }()
     private let labelDeveloperDescription: UILabel = {
         let label = UILabel()
-        var desc = "A passionate programmer who enjoy creating cool and wonderful ideas into reality."
-        desc += " Currently I'm focusing on mobile & web development."
-        label.text = desc
         label.numberOfLines = 0
         label.textAlignment = .center
         label.textColor = .gray
         label.font = UIFont.systemFont(ofSize: 12)
         return label
+    }()
+    private let socialMediaStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        return stackView
     }()
     private let btnGithub: UIButton = {
         let btn = UIButton()
@@ -61,13 +63,27 @@ class AboutDeveloperViewController: UIViewController {
         btn.layer.cornerRadius = 10
         return btn
     }()
+    private let btnEditProfile: UIButton = {
+        let btn = UIButton()
+        btn.setTitle("Edit Profile", for: .normal)
+        btn.backgroundColor = .primaryColor
+        btn.layer.cornerRadius = 10
+        return btn
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configViewController()
         configViewHierarchy()
         configConstraints()
+        loadData()
+        configData()
         configRx()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        loadData()
+        configData()
     }
     
     private func configViewController() {
@@ -82,9 +98,12 @@ class AboutDeveloperViewController: UIViewController {
         contentView.addSubview(imgDeveloper)
         contentView.addSubview(labelDeveloper)
         contentView.addSubview(labelDeveloperDescription)
-        contentView.addSubview(btnGithub)
-        contentView.addSubview(btnInstagram)
-        contentView.addSubview(btnLinkedin)
+        contentView.addSubview(socialMediaStackView)
+        contentView.addSubview(btnEditProfile)
+        
+        socialMediaStackView.addArrangedSubview(btnGithub)
+        socialMediaStackView.addArrangedSubview(btnInstagram)
+        socialMediaStackView.addArrangedSubview(btnLinkedin)
     }
     
     private func configConstraints() {
@@ -93,9 +112,8 @@ class AboutDeveloperViewController: UIViewController {
         imgDeveloper.translatesAutoresizingMaskIntoConstraints = false
         labelDeveloper.translatesAutoresizingMaskIntoConstraints = false
         labelDeveloperDescription.translatesAutoresizingMaskIntoConstraints = false
-        btnGithub.translatesAutoresizingMaskIntoConstraints = false
-        btnInstagram.translatesAutoresizingMaskIntoConstraints = false
-        btnLinkedin.translatesAutoresizingMaskIntoConstraints = false
+        socialMediaStackView.translatesAutoresizingMaskIntoConstraints = false
+        btnEditProfile.translatesAutoresizingMaskIntoConstraints = false
         
         scrollView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
@@ -119,44 +137,60 @@ class AboutDeveloperViewController: UIViewController {
             labelDeveloperDescription.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             labelDeveloperDescription.widthAnchor.constraint(equalToConstant: 200),
             
-            btnGithub.topAnchor.constraint(equalTo: labelDeveloperDescription.bottomAnchor, constant: 20),
-            btnGithub.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            btnGithub.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
-            btnGithub.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
+            socialMediaStackView.topAnchor.constraint(equalTo: labelDeveloperDescription.bottomAnchor, constant: 20),
+            socialMediaStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
+            socialMediaStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             
-            btnInstagram.topAnchor.constraint(equalTo: btnGithub.bottomAnchor, constant: 10),
-            btnInstagram.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            btnInstagram.leadingAnchor.constraint(equalTo: btnGithub.leadingAnchor),
-            btnInstagram.trailingAnchor.constraint(equalTo: btnGithub.trailingAnchor),
+            btnEditProfile.topAnchor.constraint(equalTo: socialMediaStackView.bottomAnchor, constant: 10),
+            btnEditProfile.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            btnEditProfile.leadingAnchor.constraint(equalTo: socialMediaStackView.leadingAnchor),
+            btnEditProfile.trailingAnchor.constraint(equalTo: socialMediaStackView.trailingAnchor),
             
-            btnLinkedin.topAnchor.constraint(equalTo: btnInstagram.bottomAnchor, constant: 10),
-            btnLinkedin.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            btnLinkedin.leadingAnchor.constraint(equalTo: btnGithub.leadingAnchor),
-            btnLinkedin.trailingAnchor.constraint(equalTo: btnGithub.trailingAnchor),
-            
-            btnLinkedin.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            btnEditProfile.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
+    }
+    
+    private func loadData() {
+        devProfile = DeveloperProfile.getDefaultFromUserDefault()
+    }
+    
+    private func configData() {
+        imgDeveloper.image = devProfile.image
+        labelDeveloper.text = devProfile.name
+        labelDeveloperDescription.text = devProfile.description
     }
     
     private func configRx() {
         btnGithub.rx.tap
             .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
-            .subscribe(onNext: {
-                self.openExternalURL(urlString: "https://github.com/davindj")
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.openExternalURL(urlString: "https://github.com/\(self.devProfile.githubUsername)")
             })
             .disposed(by: disposeBag)
         
         btnInstagram.rx.tap
             .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
-            .subscribe(onNext: {
-                self.openExternalURL(urlString: "https://instagram.com/pindavin")
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.openExternalURL(urlString: "https://instagram.com/\(self.devProfile.instagramUsername)")
             })
             .disposed(by: disposeBag)
         
         btnLinkedin.rx.tap
             .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
-            .subscribe(onNext: {
-                self.openExternalURL(urlString: "https://www.linkedin.com/in/davin-djayadi")
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                self.openExternalURL(urlString: "https://www.linkedin.com/in/\(self.devProfile.linkedInUsername)")
+            })
+            .disposed(by: disposeBag)
+        
+        btnEditProfile.rx.tap
+            .throttle(.milliseconds(300), scheduler: MainScheduler.asyncInstance)
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                let editDeveloperVC = EditDeveloperViewController()
+                self.navigationController?.pushViewController(editDeveloperVC, animated: true)
             })
             .disposed(by: disposeBag)
     }
