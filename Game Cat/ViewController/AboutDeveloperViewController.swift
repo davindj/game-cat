@@ -63,6 +63,7 @@ class AboutDeveloperViewController: UIViewController {
         btn.layer.cornerRadius = 10
         return btn
     }()
+    private let dividerView: UIView = DividerView(labelText: "you can also be developer by editing current profile :D")
     private let btnEditProfile: UIButton = {
         let btn = UIButton()
         btn.setTitle("Edit Profile", for: .normal)
@@ -99,6 +100,7 @@ class AboutDeveloperViewController: UIViewController {
         contentView.addSubview(labelDeveloper)
         contentView.addSubview(labelDeveloperDescription)
         contentView.addSubview(socialMediaStackView)
+        contentView.addSubview(dividerView)
         contentView.addSubview(btnEditProfile)
         
         socialMediaStackView.addArrangedSubview(btnGithub)
@@ -113,6 +115,7 @@ class AboutDeveloperViewController: UIViewController {
         labelDeveloper.translatesAutoresizingMaskIntoConstraints = false
         labelDeveloperDescription.translatesAutoresizingMaskIntoConstraints = false
         socialMediaStackView.translatesAutoresizingMaskIntoConstraints = false
+        dividerView.translatesAutoresizingMaskIntoConstraints = false
         btnEditProfile.translatesAutoresizingMaskIntoConstraints = false
         
         scrollView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
@@ -141,7 +144,11 @@ class AboutDeveloperViewController: UIViewController {
             socialMediaStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40),
             socialMediaStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40),
             
-            btnEditProfile.topAnchor.constraint(equalTo: socialMediaStackView.bottomAnchor, constant: 10),
+            dividerView.topAnchor.constraint(equalTo: socialMediaStackView.bottomAnchor, constant: 20),
+            dividerView.leadingAnchor.constraint(equalTo: socialMediaStackView.leadingAnchor),
+            dividerView.trailingAnchor.constraint(equalTo: socialMediaStackView.trailingAnchor),
+            
+            btnEditProfile.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 10),
             btnEditProfile.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             btnEditProfile.leadingAnchor.constraint(equalTo: socialMediaStackView.leadingAnchor),
             btnEditProfile.trailingAnchor.constraint(equalTo: socialMediaStackView.trailingAnchor),
